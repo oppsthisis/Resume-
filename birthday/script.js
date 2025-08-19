@@ -307,7 +307,7 @@ function spawnFloater() {
   setTimeout(() => el.remove(), (duration + 1) * 1000);
 }
 // View mode: 'full' or 'desktop'
-let viewMode = 'full';
+let viewMode = 'desktop';
 function applyDesktopScale() {
   const content = scene;
   if (!content) return;
@@ -597,6 +597,10 @@ viewToggle && viewToggle.addEventListener('click', () => {
   viewToggle.textContent = viewMode === 'full' ? '🖥️ Desktop View' : '📱 Full View';
   applyDesktopScale();
 });
+// Set correct initial label
+if (viewToggle) {
+  viewToggle.textContent = viewMode === 'full' ? '🖥️ Desktop View' : '📱 Full View';
+}
 
 // Prevent zoom gestures
 // Zoom allowed: no blocking handlers
