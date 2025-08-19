@@ -25,7 +25,7 @@ const wishLine = document.getElementById('wishLine');
 const floaters = document.getElementById('floaters');
 const fireworksCanvas = document.getElementById('fireworks');
 const starfield = document.getElementById('starfield');
-const shayariList = document.getElementById('shayariList');
+const shayariBox = document.getElementById('shayariBox');
 const prevShayari = document.getElementById('prevShayari');
 const nextShayari = document.getElementById('nextShayari');
 const toggleSoundBtn = document.getElementById('toggleSound');
@@ -431,20 +431,22 @@ const SHAYARI = [
   'Tu muskuraati rahe sada, yehi meri har dua.'
 ];
 
-function buildShayariSlides() {
-  shayariList.innerHTML = '';
-  SHAYARI.forEach((line, idx) => {
-    const li = document.createElement('li');
-    li.textContent = line;
-    if (idx === 0) li.classList.add('active');
-    shayariList.appendChild(li);
+function typeInto(el, text, speed = 22) {
+  return new Promise(async (resolve) => {
+    el.textContent = '';
+    for (const ch of text) {
+      el.textContent += ch;
+      await new Promise(r => setTimeout(r, speed));
+    }
+    resolve();
   });
 }
 
-function showShayari(index) {
-  const items = Array.from(shayariList.children);
-  state.shayariIndex = (index + items.length) % items.length;
-  items.forEach((el, i) => el.classList.toggle('active', i === state.shayariIndex));
+async function showShayari(index) {
+  const total = SHAYARI.length;
+  state.shayariIndex = (index + total) % total;
+  const text = SHAYARI[state.shayariIndex];
+  await typeInto(shayariBox, text, 22);
 }
 
 // Audio control
@@ -552,7 +554,7 @@ closeQR.addEventListener('click', () => {
 });
 
 // Prebuild shayari list and navigation
-buildShayariSlides();
+showShayari(0);
 prevShayari.addEventListener('click', () => showShayari(state.shayariIndex - 1));
 nextShayari.addEventListener('click', () => showShayari(state.shayariIndex + 1));
 
