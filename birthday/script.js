@@ -40,6 +40,13 @@ const qrOverlay = document.getElementById('qr-overlay');
 const qrImage = document.getElementById('qrImage');
 const closeQR = document.getElementById('closeQR');
 const desktopCanvas = document.getElementById('desktopCanvas');
+const galleryGrid = document.getElementById('galleryGrid');
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const closeLightbox = document.getElementById('closeLightbox');
+const typewriterEl = document.getElementById('typewriter');
+const themeToggle = document.getElementById('themeToggle');
+const shareBtn = document.getElementById('shareBtn');
 
 // Load music sources dynamically (use royalty-free or path placeholders)
 const SONGS = [
@@ -314,6 +321,97 @@ function startFloaters() {
   setInterval(spawnFloater, 1200);
 }
 
+// Parallax banner scroll effect
+window.addEventListener('scroll', () => {
+  const banner = document.querySelector('.parallax-banner');
+  if (!banner) return;
+  const y = window.scrollY;
+  banner.style.backgroundPositionY = `${y * 0.3}px`;
+});
+
+// Build gallery with placeholder images; replace URLs with your own
+const GALLERY = [
+  'https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1600&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1600&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1541976076758-347942db1972?q=80&w=1600&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1600&auto=format&fit=crop'
+];
+
+function buildGallery() {
+  if (!galleryGrid) return;
+  galleryGrid.innerHTML = '';
+  GALLERY.forEach((src, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.setProperty('--rot', (Math.random() * 6 - 3) + 'deg');
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'Memory photo ' + (i + 1);
+    card.appendChild(img);
+    card.addEventListener('click', () => openLightbox(src));
+    galleryGrid.appendChild(card);
+  });
+}
+
+function openLightbox(src) {
+  if (!lightbox || !lightboxImg) return;
+  lightboxImg.src = src;
+  lightbox.classList.add('visible');
+}
+closeLightbox && closeLightbox.addEventListener('click', () => lightbox.classList.remove('visible'));
+
+// Our Story Typewriter
+const STORY_LINES = [
+  'Ek din dosti hui, aur phir har din yaari gehri hoti gayi...',
+  'Hasne ki wajah tum, himmat ka sahara bhi tum...',
+  'Har saal, har pal, sirf khushiyan tumhare naam...',
+  'Aaj ke din, sirf tum — Happy Birthday, Bestie!'
+];
+
+async function typewriter(lines, el, speed = 28, gap = 600) {
+  if (!el) return;
+  for (const line of lines) {
+    el.innerHTML += '<div></div>';
+    const div = el.lastChild;
+    for (const ch of line) {
+      div.textContent += ch;
+      await new Promise(r => setTimeout(r, speed));
+    }
+    await new Promise(r => setTimeout(r, gap));
+  }
+}
+
+// Theme toggle (light/dark accent)
+let themeAlt = false;
+function applyTheme() {
+  document.documentElement.style.setProperty('--pink', themeAlt ? '#7b5cff' : '#ff66a6');
+  document.documentElement.style.setProperty('--cyan', themeAlt ? '#a8ffea' : '#7ef9ff');
+  document.documentElement.style.setProperty('--yellow', themeAlt ? '#ffc777' : '#ffd166');
+}
+themeToggle && themeToggle.addEventListener('click', () => {
+  themeAlt = !themeAlt;
+  applyTheme();
+});
+
+// Share button
+shareBtn && shareBtn.addEventListener('click', async () => {
+  const shareData = {
+    title: 'Birthday Surprise',
+    text: 'Come see this special birthday surprise! 🎉',
+    url: location.href
+  };
+  try {
+    if (navigator.share) await navigator.share(shareData);
+    else {
+      await navigator.clipboard.writeText(location.href);
+      shareBtn.textContent = 'Copied!';
+      setTimeout(() => (shareBtn.textContent = '📤 Share'), 1200);
+    }
+  } catch (_) {}
+});
+
 // Shayari
 const SHAYARI = [
   'Dosti ki meethaas tum se hi hai, har muskurahat mein tera hissa hai.',
@@ -413,6 +511,9 @@ enterBtn.addEventListener('click', () => {
   }, 800);
   fireworksStart();
   startFloaters();
+  buildGallery();
+  typewriter(STORY_LINES, typewriterEl);
+  applyTheme();
 });
 
 nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') enterBtn.click(); });

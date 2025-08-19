@@ -76,6 +76,9 @@
         <p id="wishLine" class="wish-line"></p>
       </header>
 
+      <!-- Parallax banner -->
+      <section class="parallax-banner" aria-label="Parallax banner"></section>
+
       <!-- Cartoon Character (Kawaii Cake) -->
       <section class="centerpiece">
         <div id="cake" class="kawaii-cake" aria-label="Cute birthday cake">
@@ -110,9 +113,23 @@
         </div>
       </section>
 
+      <!-- Gallery -->
+      <section class="gallery">
+        <h2>Memories</h2>
+        <div id="galleryGrid" class="grid" aria-live="polite"></div>
+      </section>
+
+      <!-- Our Story (Typewriter) -->
+      <section class="story">
+        <h2>Our Story</h2>
+        <div id="typewriter" class="typewriter" aria-live="polite"></div>
+      </section>
+
       <footer class="controls">
         <button id="toggleSound" class="ghost">🔊 Sound</button>
         <button id="switchPerson" class="ghost">Switch: Saniya ⇄ Afreen</button>
+        <button id="themeToggle" class="ghost">🎨 Theme</button>
+        <button id="shareBtn" class="ghost">📤 Share</button>
       </footer>
     </main>
     </div>
@@ -122,6 +139,16 @@
 
     <!-- Heart burst container -->
     <div id="burst" aria-hidden="true"></div>
+
+    <!-- Lightbox -->
+    <div id="lightbox" class="overlay" role="dialog" aria-modal="true">
+      <div class="overlay-inner" style="background:transparent;">
+        <img id="lightboxImg" alt="Preview" style="max-width:90vw; max-height:80vh; border-radius:16px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);" />
+        <div style="margin-top:12px;">
+          <button id="closeLightbox" class="primary">Close</button>
+        </div>
+      </div>
+    </div>
 
     <!-- QR Overlay -->
     <div id="qr-overlay" class="overlay" role="dialog" aria-modal="true">
