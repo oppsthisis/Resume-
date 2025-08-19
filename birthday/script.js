@@ -24,6 +24,7 @@ const personName = document.getElementById('personName');
 const wishLine = document.getElementById('wishLine');
 const floaters = document.getElementById('floaters');
 const fireworksCanvas = document.getElementById('fireworks');
+const starfield = document.getElementById('starfield');
 const shayariList = document.getElementById('shayariList');
 const prevShayari = document.getElementById('prevShayari');
 const nextShayari = document.getElementById('nextShayari');
@@ -31,6 +32,9 @@ const toggleSoundBtn = document.getElementById('toggleSound');
 const switchPersonBtn = document.getElementById('switchPerson');
 const bgm = document.getElementById('bgm');
 const burst = document.getElementById('burst');
+const desktopHint = document.getElementById('desktop-hint');
+const continueMobile = document.getElementById('continueMobile');
+const copyLink = document.getElementById('copyLink');
 
 // Load music sources dynamically (use royalty-free or path placeholders)
 const SONGS = [
@@ -227,6 +231,39 @@ function fireworksStart() {
   requestAnimationFrame(tick);
 }
 
+// Starfield background
+function startStarfield() {
+  const canvas = starfield;
+  const ctx = canvas.getContext('2d');
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  const stars = Array.from({ length: 160 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    z: Math.random() * 0.6 + 0.4,
+    tw: Math.random() * 0.6 + 0.2
+  }));
+  function tick(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const r = s.z * 1.2;
+      const alpha = 0.4 + Math.sin((t / 500) * s.tw) * 0.3;
+      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, r, 0, Math.PI * 2);
+      ctx.fill();
+      s.y += 0.02 + s.z * 0.06; // slow drift down
+      if (s.y > canvas.height + 2) { s.y = -2; s.x = Math.random() * canvas.width; }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 // Floaters generator
 function spawnFloater() {
   const el = document.createElement('div');
@@ -318,7 +355,12 @@ startBtn.addEventListener('click', () => {
   confettiBoom(confettiCanvas);
   setTimeout(() => {
     introOverlay.classList.remove('visible');
-    nameGate.classList.add('visible');
+    // Mobile hint: show if screen width < 720px, otherwise go straight
+    if (window.innerWidth < 720) {
+      desktopHint.classList.add('visible');
+    } else {
+      nameGate.classList.add('visible');
+    }
   }, 900);
 });
 
@@ -346,6 +388,22 @@ enterBtn.addEventListener('click', () => {
 
 nameInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') enterBtn.click(); });
 
+// Desktop hint controls
+continueMobile.addEventListener('click', () => {
+  desktopHint.classList.remove('visible');
+  nameGate.classList.add('visible');
+});
+copyLink.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(location.href);
+    copyLink.textContent = 'Link Copied!';
+    setTimeout(() => (copyLink.textContent = 'Copy Link'), 1500);
+  } catch (_) {
+    copyLink.textContent = 'Copy Failed';
+    setTimeout(() => (copyLink.textContent = 'Copy Link'), 1500);
+  }
+});
+
 // Prebuild shayari list and navigation
 buildShayariSlides();
 prevShayari.addEventListener('click', () => showShayari(state.shayariIndex - 1));
@@ -356,4 +414,7 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) bgm.pause();
   else if (state.audioEnabled) ensureAudio();
 });
+
+// Start background animations
+startStarfield();
 

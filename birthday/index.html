@@ -11,6 +11,19 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <canvas id="starfield" aria-hidden="true"></canvas>
+    <!-- Desktop hint overlay -->
+    <div id="desktop-hint" class="overlay" role="dialog" aria-modal="true">
+      <div class="overlay-inner">
+        <div class="title">Best Experience on Desktop/Laptop</div>
+        <p class="subtitle">Bhai, yeh surprise desktop pe aur zyada kamaal lagta hai. Chaho to yahin se continue karo.</p>
+        <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
+          <button id="continueMobile" class="primary">Continue Anyway</button>
+          <button id="copyLink" class="ghost">Copy Link</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Intro overlay: tap to start -->
     <div id="intro-overlay" class="overlay visible" role="dialog" aria-modal="true">
       <div class="overlay-inner">
