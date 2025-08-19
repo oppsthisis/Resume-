@@ -21,6 +21,21 @@ body {
   overflow-x: hidden;
 }
 
+/* Force desktop-style canvas on mobile by scaling a fixed-width container */
+.desktop-canvas {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.desktop-canvas > #scene {
+  width: 1100px; /* desktop width */
+  min-height: 720px;
+  transform-origin: top center;
+}
+
+
 #starfield { position: fixed; inset: 0; z-index: -2; background: transparent; }
 
 button.primary {

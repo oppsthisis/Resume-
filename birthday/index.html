@@ -54,7 +54,8 @@
       </div>
     </div>
 
-    <!-- Main Celebration Scene -->
+    <!-- Main Celebration Scene (wrapped to force desktop layout on mobile) -->
+    <div id="desktopCanvas" class="desktop-canvas">
     <main id="scene" class="hidden" aria-live="polite">
       <div class="aurora-bg" aria-hidden="true"></div>
       <canvas id="fireworks" aria-hidden="true"></canvas>
@@ -106,6 +107,7 @@
         <button id="switchPerson" class="ghost">Switch: Saniya ⇄ Afreen</button>
       </footer>
     </main>
+    </div>
 
     <!-- Audio (multiple sources with graceful fallback) -->
     <audio id="bgm" preload="auto" loop></audio>

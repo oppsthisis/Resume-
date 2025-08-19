@@ -39,6 +39,7 @@ const showQR = document.getElementById('showQR');
 const qrOverlay = document.getElementById('qr-overlay');
 const qrImage = document.getElementById('qrImage');
 const closeQR = document.getElementById('closeQR');
+const desktopCanvas = document.getElementById('desktopCanvas');
 
 // Load music sources dynamically (use royalty-free or path placeholders)
 const SONGS = [
@@ -283,6 +284,19 @@ function spawnFloater() {
   floaters.appendChild(el);
   setTimeout(() => el.remove(), (duration + 1) * 1000);
 }
+// Desktop layout scaler — scales the scene to fit viewport width while keeping desktop aspect
+function applyDesktopScale() {
+  const container = desktopCanvas;
+  const content = scene;
+  if (!container || !content) return;
+  const targetWidth = 1100;
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const scale = Math.min(vw / targetWidth, 1); // never upscale beyond 1
+  content.style.transform = `scale(${scale}) translateY(${scale < 1 ? (vh/scale - vh)/4 + 'px' : '0'})`;
+}
+window.addEventListener('resize', applyDesktopScale);
+
 
 function startFloaters() {
   for (let i = 0; i < 10; i++) setTimeout(spawnFloater, i * 400);
@@ -438,4 +452,5 @@ document.addEventListener('visibilitychange', () => {
 
 // Start background animations
 startStarfield();
+applyDesktopScale();
 
