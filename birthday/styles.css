@@ -21,6 +21,8 @@ body {
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  touch-action: manipulation;
+  overscroll-behavior: none;
 }
 
 /* Force desktop-style canvas on mobile by scaling a fixed-width container */
