@@ -158,6 +158,17 @@ function heartBurst(x, y, count = 28) {
   }
 }
 
+// Cursor/touch heart trail
+function heartTrail(x, y) { heartBurst(x, y, 8); }
+document.addEventListener('pointermove', (e) => {
+  if (!scene || scene.classList.contains('hidden')) return;
+  if (Math.random() < 0.1) heartTrail(e.clientX, e.clientY);
+});
+document.addEventListener('click', (e) => {
+  if (!scene || scene.classList.contains('hidden')) return;
+  heartTrail(e.clientX, e.clientY);
+});
+
 // Simple confetti using canvas
 function confettiBoom(canvas, durationMs = 1200) {
   const ctx = canvas.getContext('2d');
@@ -453,4 +464,3 @@ document.addEventListener('visibilitychange', () => {
 // Start background animations
 startStarfield();
 applyDesktopScale();
-

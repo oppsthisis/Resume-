@@ -105,8 +105,9 @@ button:focus { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .hidden { display: none; }
 .hero { text-align: center; padding-top: 40px; }
 .headline { font-family: 'Pacifico', cursive; font-size: 48px; margin: 0 0 6px; }
-.headline .hb { color: var(--yellow); text-shadow: 0 6px 30px rgba(255, 209, 102, 0.45); display: block; }
-.headline .name { color: var(--pink); text-shadow: 0 6px 30px rgba(255, 102, 166, 0.45); display: block; font-size: 56px; }
+.headline .hb { display: block; background: linear-gradient(90deg, #ffd166, #ff66a6, #7ef9ff, #ffd166); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s linear infinite; text-shadow: 0 6px 30px rgba(255, 209, 102, 0.25); }
+.headline .name { display: block; font-size: 56px; background: linear-gradient(90deg, #ff66a6, #ff8dc6, #ffd2e5, #ff66a6); -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 7s linear infinite reverse; text-shadow: 0 6px 30px rgba(255, 102, 166, 0.25); }
+@keyframes shine { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
 .wish-line { text-align: center; opacity: 0.9; margin: 0 12px 24px; font-weight: 300; }
 
 .aurora-bg {
@@ -121,6 +122,16 @@ button:focus { outline: 2px solid var(--cyan); outline-offset: 3px; }
   0% { transform: translateY(0) scale(1); }
   100% { transform: translateY(20px) scale(1.05); }
 }
+/* Floating glowing orbs */
+.orbs { position: fixed; inset: -10% -10% -10% -10%; z-index: -1; filter: blur(18px) saturate(120%); pointer-events: none; }
+.orb { position: absolute; width: 220px; height: 220px; border-radius: 50%; opacity: 0.18; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), transparent 60%); mix-blend-mode: screen; animation: float 16s ease-in-out infinite; }
+.orb:nth-child(1){ left:10%; top:20%; background: radial-gradient(circle,#ff66a6, transparent 60%); animation-delay:0s; }
+.orb:nth-child(2){ left:75%; top:15%; background: radial-gradient(circle,#7ef9ff, transparent 60%); animation-delay:2s; }
+.orb:nth-child(3){ left:50%; top:5%; background: radial-gradient(circle,#ffd166, transparent 60%); animation-delay:4s; }
+.orb:nth-child(4){ left:15%; bottom:10%; background: radial-gradient(circle,#b27dff, transparent 60%); animation-delay:6s; }
+.orb:nth-child(5){ right:10%; bottom:15%; background: radial-gradient(circle,#ff9a8b, transparent 60%); animation-delay:8s; }
+.orb:nth-child(6){ right:40%; bottom:5%; background: radial-gradient(circle,#a0ffb0, transparent 60%); animation-delay:10s; }
+@keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-26px) } }
 
 /* Kawaii cake */
 .centerpiece { display: grid; place-items: center; margin: 20px 0 10px; }
@@ -162,7 +173,7 @@ button:focus { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .shayari { max-width: 900px; margin: 10px auto 60px; padding: 0 16px; }
 .shayari h2 { text-align: center; font-weight: 700; margin-bottom: 8px; }
 .carousel { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
-.slides { list-style: none; margin: 0; padding: 0; min-height: 110px; display: grid; place-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 18px; }
+.slides { list-style: none; margin: 0; padding: 0; min-height: 110px; display: grid; place-items: center; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; padding: 18px; backdrop-filter: blur(8px) saturate(130%); }
 .slides li { text-align: center; opacity: 0; transform: translateY(8px); transition: 400ms ease; line-height: 1.6; font-weight: 400; }
 .slides li.active { opacity: 1; transform: translateY(0); }
 
@@ -181,4 +192,3 @@ button:focus { outline: 2px solid var(--cyan); outline-offset: 3px; }
   .headline { font-size: 64px; }
   .headline .name { font-size: 72px; }
 }
-
