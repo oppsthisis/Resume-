@@ -26,17 +26,16 @@ body {
   overscroll-behavior: auto;
 }
 
-/* Force desktop-style canvas on mobile by scaling a fixed-width container */
+/* Full-viewport layout */
 .desktop-canvas {
-  position: fixed;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  overflow: hidden;
+  position: relative;
+  inset: auto;
+  display: block;
+  overflow: visible;
 }
 .desktop-canvas > #scene {
-  width: 1100px; /* desktop width */
-  min-height: 720px;
+  width: 100%;
+  min-height: 100vh;
   transform-origin: top center;
 }
 

@@ -305,17 +305,8 @@ function spawnFloater() {
   floaters.appendChild(el);
   setTimeout(() => el.remove(), (duration + 1) * 1000);
 }
-// Desktop layout scaler — scales the scene to fit viewport width while keeping desktop aspect
-function applyDesktopScale() {
-  const container = desktopCanvas;
-  const content = scene;
-  if (!container || !content) return;
-  const targetWidth = 1100;
-  const vw = window.innerWidth;
-  const vh = window.innerHeight;
-  const scale = Math.min(vw / targetWidth, 1); // never upscale beyond 1
-  content.style.transform = `scale(${scale}) translateY(${scale < 1 ? (vh/scale - vh)/4 + 'px' : '0'})`;
-}
+// Desktop layout scaler disabled for full-viewport layout
+function applyDesktopScale() { /* no-op */ }
 window.addEventListener('resize', applyDesktopScale);
 
 
