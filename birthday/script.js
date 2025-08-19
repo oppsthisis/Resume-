@@ -44,6 +44,74 @@ function pickSong() {
   return SONGS[index];
 }
 
+// -------- Audio fallback (WebAudio Melody) --------
+let audioCtx = null;
+let fallbackPlaying = false;
+let fallbackStopFns = [];
+let fallbackStartTimer = null;
+
+function startFallbackMelody() {
+  if (fallbackPlaying) return;
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    audioCtx = audioCtx || new Ctx();
+  } catch (e) {
+    return; // WebAudio not available
+  }
+  const ctx = audioCtx;
+  const master = ctx.createGain();
+  master.gain.value = 0.06; // soft volume
+  master.connect(ctx.destination);
+
+  // Approx Happy Birthday melody (key of G)
+  const melody = [
+    // freq (Hz), duration (ms)
+    [392, 350], [392, 350], [440, 700], [392, 700], [523, 700], [494, 1400],
+    [392, 350], [392, 350], [440, 700], [392, 700], [587, 700], [523, 1400],
+    [392, 350], [392, 350], [784, 700], [659, 700], [523, 700], [494, 700], [440, 1400],
+    [698, 350], [698, 350], [659, 700], [523, 700], [587, 700], [523, 1600]
+  ];
+
+  let startTime = ctx.currentTime + 0.02;
+  const toStop = [];
+  for (let i = 0; i < melody.length; i++) {
+    const [freq, durMs] = melody[i];
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    const dur = Math.max(0.05, durMs / 1000);
+    const noteGain = 0.9; // relative per note
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(noteGain, startTime + 0.02);
+    gain.gain.linearRampToValueAtTime(0.001, startTime + dur - 0.04);
+    osc.connect(gain).connect(master);
+    osc.start(startTime);
+    osc.stop(startTime + dur);
+    toStop.push(() => { try { osc.stop(); } catch(_){} });
+    startTime += dur + 0.04; // small gap
+  }
+  fallbackStopFns = toStop;
+  fallbackPlaying = true;
+
+  // Auto-loop by scheduling next start after sequence ends
+  const totalDurMs = melody.reduce((a, [,d]) => a + d, 0) + melody.length * 40;
+  setTimeout(() => {
+    if (fallbackPlaying) startFallbackMelody();
+  }, totalDurMs);
+}
+
+function stopFallbackMelody() {
+  if (!fallbackPlaying) return;
+  fallbackPlaying = false;
+  fallbackStopFns.forEach(fn => fn());
+  fallbackStopFns = [];
+  // Do not close context to allow reuse; simply suspend
+  if (audioCtx && audioCtx.state !== 'closed') {
+    try { audioCtx.suspend(); } catch(_) {}
+  }
+}
+
 function setWishLine(name) {
   const lines = [
     `Allah tumhein hamesha khush rakhe, ${name}!`,
@@ -221,7 +289,12 @@ function ensureAudio() {
   if (!bgm.src) bgm.src = pickSong();
   const playPromise = bgm.play();
   if (playPromise) {
-    playPromise.catch(() => {/* ignore autoplay restrictions after first interaction */});
+    playPromise.then(() => {
+      stopFallbackMelody();
+    }).catch(() => {
+      // If media blocked or failed, use fallback
+      if (!fallbackPlaying) startFallbackMelody();
+    });
   }
 }
 
@@ -261,7 +334,12 @@ enterBtn.addEventListener('click', () => {
   nameGate.classList.remove('visible');
   scene.classList.remove('hidden');
   state.audioEnabled = true; // enable after explicit interaction
+  // Try HTML audio; schedule fallback if it fails to start
   ensureAudio();
+  clearTimeout(fallbackStartTimer);
+  fallbackStartTimer = setTimeout(() => {
+    if (!bgm || bgm.paused) startFallbackMelody();
+  }, 800);
   fireworksStart();
   startFloaters();
 });
