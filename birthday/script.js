@@ -449,6 +449,13 @@ async function showShayari(index) {
   await typeInto(shayariBox, text, 22);
 }
 
+// auto-rotate shayari
+let shayariTimer = null;
+function startShayariAuto() {
+  if (shayariTimer) clearInterval(shayariTimer);
+  shayariTimer = setInterval(() => showShayari(state.shayariIndex + 1), 4500);
+}
+
 // Audio control
 function ensureAudio() {
   if (!state.audioEnabled) return;
@@ -555,8 +562,7 @@ closeQR.addEventListener('click', () => {
 
 // Prebuild shayari list and navigation
 showShayari(0);
-prevShayari.addEventListener('click', () => showShayari(state.shayariIndex - 1));
-nextShayari.addEventListener('click', () => showShayari(state.shayariIndex + 1));
+startShayariAuto();
 
 // Accessibility: pause when tab hidden
 document.addEventListener('visibilitychange', () => {
