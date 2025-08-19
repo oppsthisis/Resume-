@@ -47,6 +47,7 @@ const closeLightbox = document.getElementById('closeLightbox');
 const typewriterEl = document.getElementById('typewriter');
 const themeToggle = document.getElementById('themeToggle');
 const shareBtn = document.getElementById('shareBtn');
+const viewToggle = document.getElementById('viewToggle');
 
 // Load music sources dynamically (use royalty-free or path placeholders)
 const SONGS = [
@@ -305,8 +306,25 @@ function spawnFloater() {
   floaters.appendChild(el);
   setTimeout(() => el.remove(), (duration + 1) * 1000);
 }
-// Desktop layout scaler disabled for full-viewport layout
-function applyDesktopScale() { /* no-op */ }
+// View mode: 'full' or 'desktop'
+let viewMode = 'full';
+function applyDesktopScale() {
+  const content = scene;
+  if (!content) return;
+  if (viewMode === 'desktop') {
+    const targetWidth = 1100;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const scale = Math.min(vw / targetWidth, 1);
+    content.style.width = targetWidth + 'px';
+    content.style.transform = `scale(${scale}) translateY(${scale < 1 ? (vh/scale - vh)/4 + 'px' : '0'})`;
+    content.style.margin = '0 auto';
+  } else {
+    content.style.width = '100%';
+    content.style.transform = 'none';
+    content.style.margin = '0';
+  }
+}
 window.addEventListener('resize', applyDesktopScale);
 
 
@@ -572,6 +590,13 @@ document.addEventListener('visibilitychange', () => {
 // Start background animations
 startStarfield();
 applyDesktopScale();
+
+// Toggle view
+viewToggle && viewToggle.addEventListener('click', () => {
+  viewMode = viewMode === 'full' ? 'desktop' : 'full';
+  viewToggle.textContent = viewMode === 'full' ? '🖥️ Desktop View' : '📱 Full View';
+  applyDesktopScale();
+});
 
 // Prevent zoom gestures
 // Zoom allowed: no blocking handlers
