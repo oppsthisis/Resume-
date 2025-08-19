@@ -35,6 +35,10 @@ const burst = document.getElementById('burst');
 const desktopHint = document.getElementById('desktop-hint');
 const continueMobile = document.getElementById('continueMobile');
 const copyLink = document.getElementById('copyLink');
+const showQR = document.getElementById('showQR');
+const qrOverlay = document.getElementById('qr-overlay');
+const qrImage = document.getElementById('qrImage');
+const closeQR = document.getElementById('closeQR');
 
 // Load music sources dynamically (use royalty-free or path placeholders)
 const SONGS = [
@@ -402,6 +406,23 @@ copyLink.addEventListener('click', async () => {
     copyLink.textContent = 'Copy Failed';
     setTimeout(() => (copyLink.textContent = 'Copy Link'), 1500);
   }
+});
+
+// Show QR code using a public API (no dependency); falls back to Google Charts if needed
+function generateQR(url) {
+  const encoded = encodeURIComponent(url);
+  // Try goqr.me API first
+  return `https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=${encoded}`;
+}
+
+showQR.addEventListener('click', () => {
+  const link = location.href;
+  qrImage.src = generateQR(link);
+  qrOverlay.classList.add('visible');
+});
+
+closeQR.addEventListener('click', () => {
+  qrOverlay.classList.remove('visible');
 });
 
 // Prebuild shayari list and navigation

@@ -20,6 +20,7 @@
         <div style="display:flex; gap:10px; justify-content:center; margin-top:10px;">
           <button id="continueMobile" class="primary">Continue Anyway</button>
           <button id="copyLink" class="ghost">Copy Link</button>
+          <button id="showQR" class="ghost">Show QR</button>
         </div>
       </div>
     </div>
@@ -111,6 +112,18 @@
 
     <!-- Heart burst container -->
     <div id="burst" aria-hidden="true"></div>
+
+    <!-- QR Overlay -->
+    <div id="qr-overlay" class="overlay" role="dialog" aria-modal="true">
+      <div class="overlay-inner">
+        <div class="title">Open on Desktop</div>
+        <p class="subtitle">Scan this QR from your PC/Laptop to open the surprise there.</p>
+        <div style="display:grid; place-items:center; margin: 12px 0;">
+          <img id="qrImage" alt="QR code to open link on desktop" style="width: 240px; height: 240px; border-radius: 12px; background: #fff; padding: 8px;" />
+        </div>
+        <button id="closeQR" class="primary">Close</button>
+      </div>
+    </div>
 
     <script src="./script.js" defer></script>
   </body>

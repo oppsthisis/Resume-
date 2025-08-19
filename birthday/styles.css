@@ -59,6 +59,7 @@ button:focus { outline: 2px solid var(--cyan); outline-offset: 3px; }
   padding: 32px 20px;
 }
 .overlay#desktop-hint .overlay-inner { max-width: 560px; }
+.overlay#qr-overlay .overlay-inner { max-width: 480px; }
 .overlay .title { font-size: 28px; font-weight: 800; letter-spacing: 0.5px; }
 .overlay .spark { filter: drop-shadow(0 0 10px #fff); }
 .overlay .subtitle { opacity: 0.8; }
