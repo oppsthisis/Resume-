@@ -50,7 +50,10 @@ const shareBtn = document.getElementById('shareBtn');
 
 // Load music sources dynamically (use royalty-free or path placeholders)
 const SONGS = [
-  // Add more local files to /birthday/audio/ if desired
+  // Friendship/mellow acoustic (priority default)
+  'https://www.bensound.com/bensound-music/bensound-acousticbreeze.mp3',
+  'https://www.bensound.com/bensound-music/bensound-sunny.mp3',
+  // Birthday-themed
   'https://cdn.pixabay.com/download/audio/2022/03/15/audio_0d4a58a87d.mp3?filename=birthday-112188.mp3',
   'https://cdn.pixabay.com/download/audio/2021/09/16/audio_c666e5c6d0.mp3?filename=happy-birthday-9623.mp3',
 ];
@@ -463,7 +466,8 @@ async function startShayariAuto() {
 // Audio control
 function ensureAudio() {
   if (!state.audioEnabled) return;
-  if (!bgm.src) bgm.src = pickSong();
+  // Prefer first track (friendship vibe) for initial play
+  if (!bgm.src) bgm.src = SONGS[0] || pickSong();
   const playPromise = bgm.play();
   if (playPromise) {
     playPromise.then(() => {
