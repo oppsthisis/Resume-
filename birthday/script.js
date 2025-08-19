@@ -595,3 +595,14 @@ document.addEventListener('touchend', (e) => {
   if (now - lastTouchEnd <= 300) e.preventDefault();
   lastTouchEnd = now;
 }, { passive: false });
+// Block pinch with multi-touch
+document.addEventListener('touchmove', (e) => {
+  if (e.scale !== undefined && e.scale !== 1) e.preventDefault();
+  if (e.touches && e.touches.length > 1) e.preventDefault();
+}, { passive: false });
+// Block keyboard zoom (Ctrl + +/-)
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && (e.key === '+' || e.key === '=' || e.key === '-' || e.key === '0')) {
+    e.preventDefault();
+  }
+});
