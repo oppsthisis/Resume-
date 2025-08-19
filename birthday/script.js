@@ -331,7 +331,7 @@ window.addEventListener('scroll', () => {
 
 // Build gallery with placeholder images; replace URLs with your own
 const GALLERY = [
-  'https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=1600&auto=format&fit=crop',
+  'https://res.cloudinary.com/dxjkbpmgm/image/upload/v1755595200/IMG_20250816_203354_hpyqym.png',
   'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1513151233558-d860c5398176?q=80&w=1600&auto=format&fit=crop',
@@ -451,9 +451,13 @@ async function showShayari(index) {
 
 // auto-rotate shayari
 let shayariTimer = null;
-function startShayariAuto() {
-  if (shayariTimer) clearInterval(shayariTimer);
-  shayariTimer = setInterval(() => showShayari(state.shayariIndex + 1), 4500);
+async function startShayariAuto() {
+  if (shayariTimer) clearTimeout(shayariTimer);
+  await showShayari(state.shayariIndex);
+  shayariTimer = setTimeout(async function cycle() {
+    await showShayari(state.shayariIndex + 1);
+    shayariTimer = setTimeout(cycle, 1200);
+  }, 1500);
 }
 
 // Audio control
