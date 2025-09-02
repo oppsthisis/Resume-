@@ -32,7 +32,3 @@ A modern, interactive resume builder with real-time preview, multiple templates/
 
 - PDF export uses `html2pdf.js`, which wraps `jsPDF` and `html2canvas` for reliable styled exports.
 - If fonts or icons fail to load offline, ensure an internet connection for CDN assets.
-
-# Happy-birthday-
-
-Open `birthday/index.html` in a browser (or run a local server) to view the interactive birthday surprise for Saniya & Afreen.
