@@ -3,6 +3,164 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI-Powered Resume Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="container header-inner">
+        <div class="brand">
+          <div class="brand-logo" aria-hidden="true">🧠</div>
+          <div class="brand-text">
+            <h1>AI Resume Builder</h1>
+            <p>Create a professional resume in minutes</p>
+          </div>
+        </div>
+        <div class="controls">
+          <label class="control">
+            <span>Template</span>
+            <select id="templateSelect">
+              <option value="classic">Classic</option>
+              <option value="modern">Modern</option>
+            </select>
+          </label>
+          <label class="control">
+            <span>Theme</span>
+            <select id="themeSelect">
+              <option value="theme-slate">Slate</option>
+              <option value="theme-blue" selected>Blue</option>
+              <option value="theme-emerald">Emerald</option>
+              <option value="theme-rose">Rose</option>
+              <option value="theme-amber">Amber</option>
+            </select>
+          </label>
+          <button id="downloadPdfBtn" class="primary">Download PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container app-main">
+      <section class="editor-panel" aria-label="Resume form">
+        <div class="panel-section">
+          <h2>Personal Details</h2>
+          <div class="grid two-cols">
+            <label>
+              <span>Full Name</span>
+              <input id="inputName" type="text" placeholder="e.g., Ayesha Khan" />
+            </label>
+            <label>
+              <span>Professional Title</span>
+              <input id="inputTitle" type="text" placeholder="e.g., Frontend Engineer" />
+            </label>
+          </div>
+          <div class="grid two-cols">
+            <label>
+              <span>Email</span>
+              <input id="inputEmail" type="email" placeholder="ayesha@example.com" />
+            </label>
+            <label>
+              <span>Phone</span>
+              <input id="inputPhone" type="tel" placeholder="+92 300 1234567" />
+            </label>
+          </div>
+          <div class="grid two-cols">
+            <label>
+              <span>Location</span>
+              <input id="inputLocation" type="text" placeholder="Lahore, PK" />
+            </label>
+            <label>
+              <span>Website</span>
+              <input id="inputWebsite" type="url" placeholder="https://portfolio.me" />
+            </label>
+          </div>
+          <label>
+            <span>Summary</span>
+            <textarea id="inputSummary" rows="4" placeholder="Short professional summary"></textarea>
+          </label>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-header">
+            <h2>Skills</h2>
+            <div class="section-actions">
+              <button id="clearSkillsBtn" class="ghost">Clear</button>
+            </div>
+          </div>
+          <div class="chip-input">
+            <div id="skillsChips" class="chips" aria-live="polite"></div>
+            <input id="inputSkill" type="text" list="skillsList" placeholder="Type a skill and press Enter" />
+            <datalist id="skillsList"></datalist>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-header">
+            <h2>Experience</h2>
+            <div class="section-actions">
+              <button id="addExperienceBtn" class="secondary">Add</button>
+            </div>
+          </div>
+          <div id="experienceForms" class="stack"></div>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-header">
+            <h2>Education</h2>
+            <div class="section-actions">
+              <button id="addEducationBtn" class="secondary">Add</button>
+            </div>
+          </div>
+          <div id="educationForms" class="stack"></div>
+        </div>
+      </section>
+
+      <section class="preview-panel">
+        <div id="resumePreviewRoot" class="resume theme-blue template-classic">
+          <section class="resume-header">
+            <h1 id="pvName">Your Name</h1>
+            <p id="pvTitle" class="muted">Your Title</p>
+            <div id="pvContacts" class="contacts"></div>
+          </section>
+          <section class="resume-summary" id="pvSummaryWrap" hidden>
+            <h3>Summary</h3>
+            <p id="pvSummary"></p>
+          </section>
+          <section class="resume-skills" id="pvSkillsWrap" hidden>
+            <h3>Skills</h3>
+            <ul id="pvSkills" class="skill-list"></ul>
+          </section>
+          <section class="resume-experience" id="pvExperienceWrap" hidden>
+            <h3>Experience</h3>
+            <div id="pvExperience" class="timeline" aria-live="polite"></div>
+          </section>
+          <section class="resume-education" id="pvEducationWrap" hidden>
+            <h3>Education</h3>
+            <div id="pvEducation" class="timeline"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <div class="container">
+        <p>Built with ❤️ using HTML, CSS, and JavaScript</p>
+      </div>
+    </footer>
+
+    <!-- html2pdf.js (bundles html2canvas + jsPDF) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-YcsIP8CqS9GdQ2uK3cQe9xC6m3M7v0y3cT2sJg8m/2sWv0n3d8b2Y6k6kq6w7NQdWcK4m8YQWwX0Yk1C2Z7Yxw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="./script.js"></script>
+  </body>
+  </html>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Redirecting…</title>
     <meta http-equiv="refresh" content="0; url=birthday/" />
     <link rel="canonical" href="birthday/" />
